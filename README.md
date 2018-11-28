@@ -63,23 +63,22 @@ The preamble of your LaTeX document should look like this:
         \thankstext{T1}{Footnote to the title with the `thankstext' command.}
 
         \begin{aug}
-            \author{First Author\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
+            \author{\inits{F.}\fnms{First} \snm{Author}\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
             \address{Address of the First Author\\
                      Country\\
                      \printead{e1}}
-            \author{Second Author\ead[label=e2]{second@somewhere.com}}
-            \address{Address of the Second authors\\
+            \author{\inits{S.}\fnms{Second} \snm{Author}\ead[label=e2]{second@somewhere.com}}
+            \address{Address of the Second Author\\
                      Country\\
                      \printead{e2}}
             \and
-            \author{Third Author
+            \author{\inits{T.~N.}\fnms{Third Name} \snm{Author}
                     \ead[label=e3]{third@somewhere.com}%
                     \ead[label=u1,url]{http://www.foo.com}}
-            \address{Address of the Third author\\
+            \address{Address of the Third Author\\
                      Country\\
                      \printead{e3}\\
                      \printead{u1}}
- 
             \thankstext{t2}{Footnote to the first author with the `thankstext' command.}
         \end{aug}
 
@@ -94,7 +93,7 @@ The preamble of your LaTeX document should look like this:
         \end{keyword}
 
         \begin{keyword}
-            \kwd{sample}
+            \kwd{Sample}
             \kwd{\LaTeX}
         \end{keyword}
 

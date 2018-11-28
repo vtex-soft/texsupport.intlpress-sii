@@ -68,7 +68,7 @@
 % Requires Latex2e, ver.2000.06
 
 \def\imsfmt@name{imsart}
-\def\imsfmt@version{2014/10/16}
+\def\imsfmt@version{2018/11/12}
 
 \ProvidesFile{imsart.sty}
         [\imsfmt@version IMS article style (VS)]
@@ -425,7 +425,16 @@
   \AtBeginDocument{\let\info@line\@empty}
   \numberlines@false}
 
+% use this option for pre-edition
 
+\DeclareOption{preedit}{%
+  \doublespacing
+  \AtBeginDocument{%
+    \let\info@line\@empty
+    \set@preedit@page@layout
+    }
+  \numberlines@false
+  }
 
 % Initiate some info:
 \def\journal@name{}
@@ -467,6 +476,17 @@
   \@settopoint\topmargin
 }
 
+\def\set@preedit@page@layout{%
+  \setlength\paperwidth{\textwidth}%
+  \addtolength\paperwidth{2in}%
+  \setlength\oddsidemargin{0in}%
+  \let\evensidemargin\oddsidemargin
+  \setlength\paperheight{\textheight}%
+  \addtolength\paperheight{2in}%
+  \addtolength\paperheight{\headheight}%
+  \addtolength\paperheight{\headsep}%
+  \setlength\topmargin{0in}%
+  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Load imsart.cnf with additional options:
 \@input{\imsfmt@name.cnf}
@@ -681,9 +701,8 @@
 % Suformuojame ir isvedame zyme
 \def\thanksmark{\@ifnextchar[{\@tempswatrue\@thanksmark}{\@tempswafalse\@thanksmark[]}}
 
-\def\@thanksmark[#1]#2{%  
+\def\@thanksmark[#1]#2{%
    \@thankslabel[#1]{#2}%
-   \safelabel{#2thanks}%
    \thanksmark@fmt{\expandafter\saferef{#2thanks}\thanks@hypertarget{#2}}}
 
 % Suformuojame tik zyme
@@ -691,11 +710,13 @@
 
 \def\@thankslabel[#1]#2{%
   \if@tempswa% []
-     \protected@edef\@currentlabel{#1}%
+      \protected@edef\@currentlabel{#1}%
    \else% 
       \refstepcounter{\current@thankscounter}%
    \fi%
-   \safelabel{#2thanks}}%
+   \@ifundefined{temp@label@#2thanks}{%
+      \global\@namedef{temp@label@#2thanks}{}\safelabel{#2thanks}}{}%
+   }%
 
 % Suformuojame zyme ir idedame teksta i \@thanks:
 \def\thankstext{\@ifnextchar[{\@tempswatrue\@thankstext}{\@tempswafalse\@thankstext[]}}
@@ -1138,11 +1159,11 @@
   \fi
 }
 
-\def\qq#1{%
+\protected\def\qq#1{%
   \bgroup%
     \ifx.#1.\relax%
       \ifmmode%
-        \mbox{\normalfont\textbf{???}}
+        \mbox{\normalfont\textbf{???}}%
       \else%
         \normalfont\textbf{???}\fi
     \else%
@@ -2119,7 +2140,7 @@
   \setattribute{url}        {text} {URL: }
   \setattribute{fullurl}    {text} {URL: }
   \def\volume#1{\gdef\@volume{Vol. #1, }}
-  \def\issue#1 {\gdef\@issue{No. #1, }}
+  \def\issue#1{\gdef\@issue{No. #1, }}
   \def\pubyear#1{\gdef\@pubyear{#1,}\gdef\@copyrightyear{#1 }}
 
   \def\abstractname{}
@@ -2841,16 +2862,21 @@
   \let\bibfont\thebibliography@size
   \setlength\bibsep{0pt}}
 
-\if@load@natbib
-   \RequirePackage{natbib}
-   \set@natbib
-\else 
-  \let\xxx@thebibliography\thebibliography
-  \def\thebibliography{\thebibliography@size\xxx@thebibliography}
-  \g@addto@macro\@openbib@code{\itemsep\z@}
-  \AtBeginDocument{\@ifpackageloaded{natbib}{\set@natbib}{}}
-\fi
+\def\load@natbib@from@imsart{%
+    \if@load@natbib
+        \RequirePackage{natbib}%
+    \else 
+        \let\xxx@thebibliography\thebibliography
+        \def\thebibliography{\thebibliography@size\xxx@thebibliography}%
+        \g@addto@macro\@openbib@code{\itemsep\z@}%
+    \fi
+    \AtBeginDocument{\@ifpackageloaded{natbib}{\set@natbib}{}}%
+    }%
 
+\@ifundefined{load@natbib}{%
+    \def\load@natbib{\load@natbib@from@imsart}%
+    }{}    	
+\load@natbib
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thebibliography - structured
 
@@ -3365,6 +3391,7 @@
 \endinput
 %%
 %% History:
+2016.11.14 - \qq{} protected
 2014.10.16 - added \qq{} 
 2014.10.13 - added \OrigBibText and \endOrigBibText 
 2014.07.30 - removed \raggedright from \relateddois 

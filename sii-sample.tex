@@ -25,20 +25,19 @@
 \begin{document}
 
 \begin{frontmatter}
-\title{A sample document could be very long could be very long\protect\thanksref{T1}}
-\runtitle{A sample document}
+\title[A sample document]{A sample document could be very long could be very long\protect\thanksref{T1}}
 \thankstext{T1}{Footnote to the title with the `thankstext' command.}
 \begin{aug}
-    \author{\fnms{First} \snm{Author}\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
+    \author{\inits{F.}\fnms{First} \snm{Author}\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
     \address{Address of the First Author\\
              Country\\
              \printead{e1}}
-    \author{\fnms{Second} \snm{Author}\ead[label=e2]{second@somewhere.com}}
+    \author{\inits{S.}\fnms{Second} \snm{Author}\ead[label=e2]{second@somewhere.com}}
     \address{Address of the Second Author\\
              Country\\
              \printead{e2}}
     \and
-    \author{\fnms{Third Name} \snm{Author}
+    \author{\inits{T.~N.}\fnms{Third Name} \snm{Author}
             \ead[label=e3]{third@somewhere.com}%
             \ead[label=u1,url]{http://www.foo.com}}
     \address{Address of the Third Author\\
@@ -46,7 +45,6 @@
              \printead{e3}\\
              \printead{u1}}
     \thankstext{t2}{Corresponding author.}
-    \runauthor{F. Author, S. Author, and T.~N. Author} % use F. Author et al. for four and more authors
 \end{aug}
 %
 \received{\sday{3} \smonth{1} \syear{2018}}

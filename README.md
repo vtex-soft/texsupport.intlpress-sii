@@ -60,7 +60,6 @@ The preamble of your LaTeX document should look like this:
     \begin{frontmatter}
   
         \title{A Sample Document\protect\thanksref{T1}}
-        \runtitle{A Sample Document}
         \thankstext{T1}{Footnote to the title with the `thankstext' command.}
 
         \begin{aug}
@@ -82,8 +81,6 @@ The preamble of your LaTeX document should look like this:
                      \printead{u1}}
  
             \thankstext{t2}{Footnote to the first author with the `thankstext' command.}
-
-            \runauthor{F. Author et al.}
         \end{aug}
 
         \begin{abstract}

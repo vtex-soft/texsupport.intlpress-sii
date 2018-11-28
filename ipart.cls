@@ -17,11 +17,11 @@
 %% The original distribution is located at:
 %% http://www.e-publications.org/ims/support
 %%
-%% This class file loads standart "article.cls" with appropriate 
+%% This class file loads standard "article.cls" with appropriate
 %% settings and then style file "imsart.sty" with additional macros
 %%
-%% You are free to use this style file as you see fit, provided 
-%% that you do not make changes to the file. 
+%% You are free to use this style file as you see fit, provided
+%% that you do not make changes to the file.
 %% If you DO make changes, you are required to rename this file.
 %%
 %% It may be distributed under the terms of the LaTeX Project Public
@@ -52,7 +52,11 @@
 
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ipart}[2015/08/12 driver class for package imsart.sty]
+\ProvidesClass{ipart}[2018/11/12 driver class for package imsart.sty]
+
+\def\@publisher{International Press, Inc.}
+\def\@publisheraddress{387 Somerville Avenue, Somerville, MA 02143, U.S.A.}
+
 
 % layout options:
 \newif\if@siilayout \@siilayoutfalse
@@ -137,6 +141,27 @@
   \@joclayouttrue
 }
 
+\DeclareOption{pamq}{%
+  \def\@JID{PAMQ}
+  \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
+  \PassOptionsToPackage{leqno}{amsmath}
+  \AtBeginDocument{%
+    \def\journal@name{Pure and Applied Mathematics Quarterly}%
+    \def\journal@issn{ISSN: 1558-8599}%
+    \def\journal@eissn{ISSN: 1558-8602}%
+    \def\journal@url{http://intlpress.com/site/pub/pages/journals/items/pamq/_home/_main/index.html}%
+    }
+  \AtEndOfPackage{%
+    \let\affiliation\@gobble
+    \def\journal@id{-pamq}%
+    }
+  \@joclayouttrue
+}
+
+\newif\if@load@natbib@\@load@natbib@true
+\DeclareOption{nonatbib}{\@load@natbib@false}
+\newif\if@numbered@bibl\@numbered@bibltrue
+\DeclareOption{authoryear}{\@numbered@biblfalse}
 
 \PassOptionsToPackage{psamsfonts}{amssymb}
 \PassOptionsToPackage{cmex10}{amsmath}
@@ -152,13 +177,96 @@ You need to install file "imsart.sty" in your system\MessageBreak
 File could be downloaded from http://www.e-publications.org/ims/support
 }}
 
-
+\def\load@natbib{}
 % Load additional macros and modifications for "article.cls"
 \RequirePackage[addressatend,preprint,generic]{imsart}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ipart specific changes
 
+%  hyperref option 'breaklinks' does nothing for \printead links
+%  breakurl makes proper links for all link parts
+\RequirePackage{afterpackage}
+\AfterPackage{hyperref}{%
+    \let\origspecial@mt\special@mt
+    \def\special@mt#1#2#3{\special}%
+    \RequirePackage{breakurl}%
+    \let\special@mt\origspecial@mt
+    }
 
+\setattribute{ead}{size}{\ensure@breakable@url\upshape\ttfamily}
+
+\def\ensure@breakable@url{%
+    \def\email@ead@type{email}%
+    \ifx\ead@type\email@ead@type
+    \else
+        %  Using \url instead of \href for autobreaking
+        \def\ims@href##1##2{\url{##2}}%
+        %  Redefining tilde format in the url package (placing it higher as it was before)
+        \expandafter\g@addto@macro\csname Url@OT1encSpecials\endcsname{\do\~{\hbox{\m@th$\mathchar126$}}}%
+        %  Ensuring \ttfamily font
+        \expandafter\protect\csname url@ttstyle\endcsname
+    \fi
+    }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% automatiskai generuoja \runtitle
+\def\title{\@ifnextchar[{\title@fmt}{\title@fmt[]}}
+\def\title@fmt[#1]#2{%
+    \bgroup        
+        \let\thanksref\@gobble
+        \xdef\@runtitle@fmt{#1}%
+        \ifx\@runtitle@fmt\@empty
+            \def\title@arg##1\thanksref##2{\gdef\@title@fmt{##1}}%
+            \title@arg#2\thanksref{}
+            \gdef\@runtitle{\@title@fmt}%
+        \else
+            \gdef\@runtitle{\@runtitle@fmt}%
+        \fi
+    \egroup
+    \vglue\title@skip
+    % check if we are in {frontmatter}
+    \def\reserved@a{frontmatter}%
+    \ifx\reserved@a\@currenvir
+    \else
+        \hy@frontmatter
+    \fi
+    \bgroup
+        \no@harm
+        \xdef\@argi{#2}%
+        \xdef\@title{#2}%
+    \egroup
+    \write@pdfinfo{\hy@title}{\@argi}%
+    \if@supertoc
+        \addtocontents{toc}{\protect\contentsline{title}{\@argi}{\thepage}{}}%
+    \fi
+    \bgroup
+        \title@style\title@size\title@case{#2}\par
+    \egroup
+    }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% automatiskai generuoja \runauthor
+
+\newtoks\authors@list
+\newtoks\runauthors@list
+\def\addto@authors@list#1{%
+    \begingroup
+        \no@harm
+        \xdef\@act{\global\noexpand\authors@list{\the\authors@list#1}}\@act
+        \ifnum\theauthor=1\relax
+            \xdef\@runact{\global\noexpand\runauthors@list{\the\runauthors@list#1}}\@runact
+        \fi
+    \endgroup
+    }
+
+\def\@etal{et al.}
+
+\def\@runauthor{%
+    \ifnum\theauthor<3\relax
+        %%% Kai vienas arba du autoriai, tinka \autors@list
+        \the\authors@list
+    \else
+        \the\runauthors@list\ \@etal
+    \fi
+    }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sii layout
 \if@siilayout
@@ -233,7 +341,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \setattribute{abstractname}{skip} {\hskip12\p@}
 \setattribute{history}     {skip} {\medskipamount}
 
-% FRONT MATTER FONTS 
+% FRONT MATTER FONTS
 \setattribute{title}      {size} {\LARGE\sffamily\bfseries}
 \setattribute{author}     {size} {\large\scshape}
 \setattribute{address}    {size} {\normalsize\sffamily}
@@ -306,34 +414,102 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \def\pubyear#1{\gdef\@pubyear{#1}\gdef\@copyrightyear{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \author@fmt
+\def\@etal{et al.}
+%
+\newtoks\authors@list
+\newtoks\runauthors@list
+\newtoks\one@runauthors@list
+%
+\def\addto@runauthors@list#1{%
+    \begingroup
+        \let\inits\@firstofone
+        \let\fnms\@gobble
+        \no@harm
+        \xdef\@runact{\global\noexpand\runauthors@list{\the\runauthors@list#1}}\@runact
+        \ifnum\theauthor=1\relax
+            \xdef\@runact{\global\noexpand\one@runauthors@list{\the\one@runauthors@list#1}}\@runact
+        \fi
+    \endgroup
+    }
 
+\def\addto@authors@list#1{%
+    \begingroup
+        \let\inits\@gobble
+        \let\fnms\@firstofone
+        \no@harm
+        \xdef\@act{\global\noexpand\authors@list{\the\authors@list#1}}\@act
+    \endgroup
+    }
 
 \def\addr@author@sep{}
 \def\author@group{}
 
-\def\author@fmt[#1]#2{%
-  \stepcounter{author}%
-  \author@fmt@init%
-  \let\author@fmt@init\relax%
-  \bgroup% 
-     \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
-     \@tempcnta=\author@num\relax%
-     \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
-     \ifnum\c@author=1\addto@authors@list{#2}\else\addto@authors@list{\author@sep #2}\fi%
-     \addto@authors@group{#2}%
-     \def\fnms##1{{\fnms@size{##1}}}\def\snm##1{\snm@size{##1}}%
-     \noindent#2\thanksref{#1}%
-  \egroup}
+\def\degs#1{#1}
+\protected\def\inits#1{\xdef\@inits{#1}}
+\def\fnms#1{#1}
+\def\snm#1{#1}
+\def\roles#1{#1}
 
+\def\inits@error{%
+    \ClassError{ipart}
+        {Empty or missing `\string\inits' control sequence}
+        {Author initials are required:
+         \string\author{\string\inits{F.~N.}\string\fnms{First Name}\string\snm{Surname}}}%
+    }
+\def\author@fmt[#1]#2{%
+    \gdef\@inits{}%
+    \stepcounter{author}%
+    \author@fmt@init
+    \let\author@fmt@init\relax
+    \bgroup
+        \@tempcnta=\author@num\relax
+        \ifnum\c@author=\@tempcnta\relax
+            \def\author@sep{ and }%
+            \def\runauthor@sep{, and }%
+        \else
+            \def\author@sep{, }%
+            \def\runauthor@sep{, }%
+        \fi
+        \ifnum\c@author=1\relax
+            \addto@authors@list{#2}%
+            \addto@runauthors@list{#2}%
+        \else
+            \ifnum\c@author=2\relax
+                \addto@authors@list{\author@sep #2}%
+                \addto@runauthors@list{\author@sep #2}%
+            \else
+                \addto@authors@list{\author@sep #2}%
+                \addto@runauthors@list{\runauthor@sep #2}%
+            \fi
+        \fi
+        \addto@authors@group{#2}%
+        \def\fnms##1{\fnms@size{##1}}%
+        \def\snm##1{\snm@size{##1}}%
+        \noindent#2\thanksref{#1}%
+        \ifx\@inits\@empty
+            \inits@error
+        \fi
+    \egroup
+    }
 
 \def\addto@authors@group#1{%
-  \begingroup%
-    \no@harm%
-    \def\@act{\xdef\author@group{\author@group\addr@author@sep #1}}\@act%
-  \endgroup%
-  \gdef\addr@author@sep{, }}
+    \begingroup
+        \let\inits\@gobble
+        \let\fnms\@firstofone
+        \no@harm
+        \xdef\author@group{\author@group\addr@author@sep #1}%
+    \endgroup
+    \gdef\addr@author@sep{, }%
+    }
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% automatiskai generuoja \runauthor sii projektams
+\def\@runauthor{%
+    \ifnum\theauthor<4\relax
+        \the\runauthors@list
+    \else
+        \the\one@runauthors@list\ \@etal
+    \fi
+    }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \address@fmt
 
@@ -361,7 +537,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
        \safe@phantomsection{\addcontentsline{toc}{section}{Authors' addresses}}%
      \fi%
   \fi%
-  \begin{tabular}[t]{@{}l@{}}
+  \begin{tabular}[t]{@{}p{\columnwidth}@{}}
   \expandafter\expandafter\expandafter\csname @author@\@tmp\endcsname\\
   \expandafter\expandafter\expandafter\the\csname @address@\@tmp\endcsname
   \end{tabular}}
@@ -480,7 +656,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 
   \def\@appsectionnostar#1{%
-     \ifx.#1.% 
+     \ifx.#1.%
        \def\section@numbersep{}\old@section[\appendixname\ \thesection]{}%
      \else%
        \def\section@numbersep{.}\old@section{#1}%
@@ -528,11 +704,12 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \def\printaddresses{%
 \@tempcnta=0%
 \bgroup\parindent\z@
+\vskip\address@skip
 \@whilenum{\@tempcnta<\c@address}%
   \do{%
     \advance\@tempcnta\@ne
-    \vskip\address@skip%
-    \expandafter\printaddressnum{\the\@tempcnta}\par%
+    \vskip\address@skip
+    \expandafter\printaddressnum{\the\@tempcnta}\par
      }%
 \egroup
 \null
@@ -548,6 +725,15 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 
 \AtBeginDocument{\set@history@fmt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thebibliography, loading natbib
+
+\def\load@natbib{%
+    \if@numbered@bibl
+        \PassOptionsToPackage{numbers,square}{natbib}
+    \fi
+    \load@natbib@from@imsart
+    }
 
 \fi
 
@@ -629,7 +815,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \setattribute{abstractname}{skip} {}
 
 
-% FRONT MATTER FONTS 
+% FRONT MATTER FONTS
 \setattribute{title}      {size} {\LARGE}
 \setattribute{author}     {size} {\normalsize\scshape}
 \setattribute{address}    {size} {\footnotesize\scshape}
@@ -688,7 +874,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
   \stepcounter{author}%
   \author@fmt@init%
   \let\author@fmt@init\relax%
-  \bgroup% 
+  \bgroup%
      \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
      \@tempcnta=\author@num\relax%
      \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
@@ -827,7 +1013,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 
   \def\@appsectionnostar#1{%
-     \ifx.#1.% 
+     \ifx.#1.%
        \def\section@numbersep{}\old@section[\appendixname\ \thesection]{}%
      \else%
        \def\section@numbersep{.}\old@section{#1}%
@@ -837,7 +1023,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% table, figure
 
 
-\newdimen\tablewidth 
+\newdimen\tablewidth
 \tablewidth\textwidth
 
 \long\def\@maketablecaption#1#2{%
@@ -880,17 +1066,16 @@ File could be downloaded from http://www.e-publications.org/ims/support
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% thebibliography, loading natbib
 
 \def\set@natbib{%
-  \let\bibfont\thebibliography@size
-  \setlength\bibsep{6\p@}}
+    \let\bibfont\thebibliography@size
+    \setlength\bibsep{6\p@}%
+    }
 
-
-\if@load@natbib
-   \set@natbib
-\else 
-  \g@addto@macro\@openbib@code{\itemsep6\p@}
-\fi
-
-
+\def\load@natbib{%
+    \if@numbered@bibl
+        \PassOptionsToPackage{numbers,square}{natbib}
+    \fi
+    \load@natbib@from@imsart
+    }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% arXiv
 \def\arxiv#1{%
@@ -909,11 +1094,12 @@ File could be downloaded from http://www.e-publications.org/ims/support
 \def\printaddresses{%
   \@tempcnta=0%
   \bgroup\parindent\z@
+  \vskip\address@skip
   \@whilenum{\@tempcnta<\c@address}%
     \do{%
       \advance\@tempcnta\@ne
-      \vskip\address@skip%
-      \expandafter\printaddressnum\expandafter{\the\@tempcnta}\par%
+      \vskip\address@skip
+      \expandafter\printaddressnum\expandafter{\the\@tempcnta}\par
        }%
   \egroup
   \history@fmt
@@ -923,16 +1109,25 @@ File could be downloaded from http://www.e-publications.org/ims/support
 
 \fi
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% joc layout: end
 
 \def\copyright@fmt{}
 \def\copyrightowner@fmt#1{{\textcopyright\space\scshape #1}}
 \def\print@copyrightowner{\hfill\if!\copyrightowner@text!\else\copyrightowner@fmt{\copyrightowner@text}\fi}%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% input .cnf
+\def\articletype#1{\gdef\@articletype{#1}}
+\@onlypreamble\articletype
+\def\aid#1{\gdef\@aid{#1}}
 
-\AtEndOfPackage{\@input{ipart\journal@id.cnf}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% input .cnf
+\AtEndOfPackage{
+  \IfFileExists{ipart\journal@id.sty}
+    {\RequirePackage{ipart\journal@id}}
+    {\@input{ipart\journal@id.cnf}}
+  \if@load@natbib@
+    \load@natbib
+  \fi
+  }
 
 \endinput
 %%

@@ -35,7 +35,7 @@ The following files are given in the repository (or directly in `*.zip` archive)
 * Use the file `sii-template.tex` to start your article as a template.
 * Use the file `sii-sample.tex` as a reference for how to prepare a topmatter of your article.
 
-## Recomended usage of `ipart` package
+## Recommended usage of `ipart` package
 
 Use `sii-template.tex` as a template. 
 

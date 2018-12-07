@@ -1,19 +1,10 @@
-%% it's a sample file!
-%% please use corressponding template
+%% It's a sample file!
+%% Please use corressponding template
 
 \documentclass[sii]{ipart}
 
-\RequirePackage{amsthm,amsmath}
-\RequirePackage[numbers,square]{natbib}
+\RequirePackage{amsthm,amsmath,amssymb}
 \RequirePackage{hyperref}
-
-% settings
-\pubyear{2018}
-\volume{0}
-\issue{0}
-\firstpage{1}
-\lastpage{4}
-\arxiv{math/0000.0000}
 
 \startlocaldefs
 %\numberwithin{equation}{section}
@@ -21,11 +12,20 @@
 \newtheorem{thm}{Theorem}[section]
 \endlocaldefs
 
+% Settings
+\pubyear{2018}
+\volume{0}
+\issue{0}
+\firstpage{1}
+\lastpage{4}
+\arxiv{math/0000.0000}
+
 \begin{document}
 
 \begin{frontmatter}
 \title[A sample document]{A sample document could be very long could be very long\protect\thanksref{T1}}
 \thankstext{T1}{Footnote to the title with the `thankstext' command.}
+
 \begin{aug}
     \author{\inits{F.}\fnms{First} \snm{Author}\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
     \address{Address of the First Author\\
@@ -97,8 +97,7 @@ your own input file.
 Because printing is different from typewriting, there are a
 number of things that you have to do differently when preparing
 an input file than if you were just typing the document directly.
-Quotation marks like
-       ``this''
+Quotation marks like       ``this''
 have to be handled specially, as do quotes within quotes:
        ``\,`this'                  % \, separates the double and single quote.
     is what I just
@@ -133,7 +132,6 @@ requires a special  command.
 \TeX\ interprets some common characters as commands, so you must type
 special commands to generate them.  These characters include the
 following:
-%       \$
        \& \% \# \{ and~\}.
 
 In printing, text is emphasized by using an
@@ -194,7 +192,7 @@ $L_{11}$ & 1.472523232 & $-$1.393484549 & $-$0.083801333 & 6.733436505 & U
 
 \section{Notes}
 Footnotes\footnote{This is an example of a footnote.}
-pose no problem\footnote{And another one}.
+pose no problem\footnote{And another one.}.
 
 \section{Displayed text}
 
@@ -277,8 +275,8 @@ You can even display poetry.
 
 Mathematical formulas may also be displayed.  A displayed formula is
 one-line long; multiline formulas require special formatting
-instructions.
-   \[  x' + y^{2} = z_{i}^{2}\]
+instructions
+   \[  x' + y^{2} = z_{i}^{2}.\]
 Don't start a paragraph with a displayed equation, nor make
 one a paragraph by itself.
 
@@ -295,10 +293,8 @@ Obvious.
 \end{proof}
 
 \section{Tables and figures}
-Cross references to labelled tables you can see in Table~\ref{sphericcase} and also in Table~\ref{parset}.
-
-
-
+Cross references to labelled tables you can see in Table~\ref{sphericcase}
+and also in Table~\ref{parset}.
 
 A major
 point of difference lies in the value of the specific production rate $\pi$ for
@@ -333,7 +329,7 @@ of $0.24$ to $0.9$.
 Substituting $K _M$ in Eq. (\ref{cs}) by
 the value $K_{M}=1$ g/L as used by \cite{r1}, one finds
 with the above equation $0.3 < C_{s} < 9$ g/L. This agrees well with
-the work of  \cite{r4}, who reported that penicillin biosynthesis
+the work of \cite{r4}, who reported that penicillin biosynthesis
 repression only occurs at glucose concentrations from $C_{s}=10$ g/L on.
 The conclusion is that the glucose concentrations in the experiments of
 Pirt and Rhigelato probably were too low for glucose repression to be
@@ -380,7 +376,8 @@ no penicillin production in similar conditions.
 \caption{Pathway of the penicillin G biosynthesis.}\label{penG}
 \end{figure}
 
-Sample of cross-reference to figure. Figure~\ref{penG} shows that is not easy to get something on paper.
+Sample of cross-reference to figure.
+Figure~\ref{penG} shows that is not easy to get something on paper.
 
 
 \section{Headings}
@@ -406,7 +403,7 @@ Two equations:
 \end{equation}
 and
 \begin{equation}
-    G = \frac{P_{\rm opt} - P_{\rm ref}}{P_{\rm ref}} \mbox{\ }100 \mbox{\ }(\%)
+    G = \frac{P_{\rm opt} - P_{\rm ref}}{P_{\rm ref}} \mbox{\ }100 \mbox{\ }(\%).
 \end{equation}
 
 Two equation arrays:
@@ -416,7 +413,7 @@ Two equation arrays:
   \frac{dP}{dt} & =    \pi    X - k_{h} P\\
   \frac{dV}{dt} & =    F
 \end{align}
-and,
+and
 \begin{align}
  \mu_{\rm substr} & =  \mu_{x} \frac{C_{s}}{K_{x}C_{x}+C_{s}}  \\
  \mu              & =  \mu_{\rm substr} - Y_{x/s}(1-H(C_{s}))(m_{s}+\pi /Y_{p/s}) \\

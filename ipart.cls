@@ -52,7 +52,7 @@
 
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ipart}[2018/11/12 driver class for package imsart.sty]
+\ProvidesClass{ipart}[2018/12/05 driver class for package imsart.sty]
 
 \def\@publisher{International Press, Inc.}
 \def\@publisheraddress{387 Somerville Avenue, Somerville, MA 02143, U.S.A.}
@@ -141,6 +141,7 @@
   \@joclayouttrue
 }
 
+\newif\if@pamqlayout
 \DeclareOption{pamq}{%
   \def\@JID{PAMQ}
   \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
@@ -156,6 +157,7 @@
     \def\journal@id{-pamq}%
     }
   \@joclayouttrue
+  \@pamqlayouttrue
 }
 
 \newif\if@load@natbib@\@load@natbib@true
@@ -1106,10 +1108,200 @@ File could be downloaded from http://www.e-publications.org/ims/support
   \null
   }
 
-
 \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% joc layout: end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% pamq layout
+\newif\if@kwdhasclass
+
+\if@pamqlayout
+
+    \RequirePackage{enumitem}
+
+    \def\abstractname{\textbf{Abstract:}\ }
+    \def\keyword@KWD{\textbf{Keywords:\ }}
+    \def\keyword@AMS{2010 Mathematics Subject Classification:}
+    \def\keyword@MSC{2010 Mathematics Subject Classification:}
+
+    \def\history@postfix{.}  
+    \def\history@size{\footnotesize\mdseries\parindent=\z@}  
+    \def\history@fmt{%
+      \ifcase\history@exist
+      \else
+        \safe@footnotetext{%
+            \history@style
+            \history@size
+            \history@prefix
+            \ifx\@received\empty@data 
+            \else
+              \received@prefix\@received \received@postfix
+            \fi
+            \ifx\@revised\empty@data 
+            \else
+              \revised@prefix\@revised \revised@postfix
+            \fi
+            \ifx\@accepted\empty@data 
+            \else
+              \accepted@prefix\@accepted \accepted@postfix
+            \fi
+            \history@postfix
+            }%
+        \gdef\history@exist{0}%
+      \fi
+      \global\let\history@fmt\relax
+      }
+
+    \def\email@text{E-mail: }
+    \def\ead@size{\ensure@breakable@url\upshape}
+    \def\address@size{\normalsize}
+    \preto\abstract@size{%
+      \setitemize[1]{%
+          leftmargin=\dimexpr(\linewidth-\abstract@width)/2 + \labelwidth \relax,%
+          rightmargin=\dimexpr(\linewidth-\abstract@width)/2\relax,%
+          }%
+      \setenumerate[1]{%
+          leftmargin=\dimexpr(\linewidth-\abstract@width)/2 + \labelwidth \relax,%
+          rightmargin=\dimexpr(\linewidth-\abstract@width)/2\relax,%
+          }%
+        }
+
+    \setattribute{copyright}  {text} {\url@fmt{}{}{\journal@name}{\journal@url}%
+                                      \print@copyrightowner\break%
+                                      \@ifundefined{volume@title}{}{\textbf{\volume@title}\break}%
+                                      \@ifnonempty{\@volume, \@issue, \@pagerange, \@pubyear\break}%
+                                      \doi@text}%
+      
+    \def\pretitle#1{\gdef\@pretitle{#1}}
+
+    \let\cny\@firstofone
+    \let\dept\@firstofone
+    \let\institution\@firstofone
+    \let\addr\@firstofone
+    \let\city\@firstofone
+
+    \def\author@fmt[#1]#2{%
+      \stepcounter{author}%
+      \author@fmt@init%
+      \let\author@fmt@init\relax%
+      \bgroup% 
+         \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
+         \@tempcnta=\author@num\relax%
+         \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
+         \ifnum\c@author=1\addto@authors@list{#2}\else\addto@authors@list{\author@sep #2}\fi%
+         \addto@authors@group{#2}%
+         \def\fnms##1{{\fnms@size{##1}}}\def\snm##1{\snm@size{##1}}%
+         \noindent#2%
+      \egroup}
+     
+    % Skirtuko \floatname@sep nereikia kai \caption{}  
+    \newbox\@tempboxb  
+    \def\floatname@sep{: }
+    \long\def\@makecaption#1#2{%
+      \vskip\abovecaptionskip
+      \normalsize
+      \sbox\@tempboxa{#1\floatname@sep #2}%
+      \sbox\@tempboxb{#1\floatname@sep}%
+      \bgroup
+      \ifdim\wd\@tempboxa=\wd\@tempboxb\relax
+        \let\floatname@sep\empty
+      \fi
+      \ifdim \wd\@tempboxa >\hsize
+        #1\floatname@sep #2\par
+      \else
+        \global \@minipagefalse
+        \hb@xt@\hsize{\hfil#1\floatname@sep #2\hfil}%
+      \fi
+      \egroup
+      \vskip\belowcaptionskip}
+
+    %% keywords
+
+    \if@keywordsasfootnote
+
+        \def\footkeyword@exist{0}
+        \newtoks\footkeyword@toks
+        \long\def\endcheck@class@exists#1\@endcheck@class@exists{}
+        \def\check@class@exists \relax{%
+          \@ifnextchar[{\@kwdhasclasstrue \endcheck@class@exists}{\@kwdhasclassfalse \endcheck@class@exists}%
+          }
+        \def\get@keyword@toks#1\end{%
+          \check@class@exists #1\@endcheck@class@exists
+          \if@kwdhasclass
+            \gdef\footkeyword@exist{1}%
+            \global\footkeyword@toks=\expandafter{\the\keyword@toks\keyword#1\endkeyword}%
+          \else
+            \keyword@toks=\expandafter{\the\keyword@toks\keyword#1\endkeyword}%
+          \fi
+          \@gobble
+          }
+
+        \def\footkeyword@fmt{\ifcase\footkeyword@exist\else\safe@footnotetext{\the\footkeyword@toks\unskip .}\fi}
+        \def\keywordname@size{\footnotesize\bfseries}
+        \def\keyword@skip{3pt}
+        \def\keyword@size{\footnotesize}
+
+        \gdef\@mainkeyword[#1]{%
+          \do@option@list{keyword}{#1}%
+          \def\keyword@name{\csname keyword@\keyword@class\endcsname}%
+          \let\kwd@sep\relax
+          \global\setbox\keyword@box=\vbox\bgroup
+             \ifvoid\keyword@box
+             \else
+                \unvbox\keyword@box
+                \vskip-\pre@kwd@depth\vtop to\pre@kwd@depth{}%
+             \fi
+             \keyword@style
+             \keyword@size
+             \parindent\sv@parindent
+             \@tempdima\textwidth
+             \advance\@tempdima by-\abstract@width
+             \divide\@tempdima by 2
+             \leftskip\@tempdima
+             \rightskip\@tempdima
+             \noindent\strut\hskip\keyword@indent{\keywordname@size\keyword@name}\space\hskip.1pt
+          }
+        \def\endmainkeyword{\keyword@postfix\par\global\pre@kwd@depth\prevdepth\egroup}
+          
+        \def\mainkeyword@fmt{%
+          \bgroup
+            \let\endkeyword\endmainkeyword
+            \let\@keyword\@mainkeyword
+            \the\keyword@toks
+            \ifvoid\keyword@box
+            \else
+              \vskip\keyword@skip
+              \box\keyword@box
+            \fi
+          \egroup
+          }
+
+        \def\put@fmt@data{%
+          \copyright@fmt 
+          \@thanks 
+          \abstract@fmt 
+          \mainkeyword@fmt 
+          \tableofcontents@fmt 
+          }
+
+        \newtoks\augthankstext@toks  
+        \def\set@late@thankstext{%
+          \global\augthankstext@toks={}%
+          \def\thankstext##1##2{\expandafter\global\expandafter\augthankstext@toks\expandafter=\expandafter{\the\augthankstext@toks \thankstext{##1}{##2}}}%
+          }
+          
+        \appto\aug\set@late@thankstext  
+        \preto\endfrontmatter{%
+          \history@fmt
+          \footkeyword@fmt
+          \the\augthankstext@toks
+          }
+
+    \fi
+
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% pamq layout: end
 
 \def\copyright@fmt{}
 \def\copyrightowner@fmt#1{{\textcopyright\space\scshape #1}}

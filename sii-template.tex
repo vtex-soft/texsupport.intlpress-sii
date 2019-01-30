@@ -1,25 +1,25 @@
-% Template for the submittion to:
-%   Statistics and Its Interface [sii]
-%
-% Author: In this template, the places where you need to add information
-%         (or delete line) are indicated by {???}.  Mostly the information
-%         required is obvious, but some explanations are given in lines starting
-% Author:
-% All other lines should be ignored.  After editing, there should be
-% no instances of ??? after this line.
+%%  Template for the submittion to:
+%%    Statistics and Its Interface [sii]
+%%
+%%  Author: In this template, the places where you need to add information
+%%          (or delete line) are indicated by {???}.  Mostly the information
+%%          required is obvious, but some explanations are given in lines starting
+%%  Author:
+%%  All other lines should be ignored.  After editing, there should be
+%%  no instances of ??? after this line.
 
-% Journal options: sii
-% Bibliography options: authoryear,nonatbib
+%%  Journal options: sii
+%%  Bibliography options: authoryear,nonatbib
 \documentclass[sii]{ipart}
 
 %\usepackage{amsthm,amsmath}
 %\RequirePackage{hyperref}
 
 \startlocaldefs
-% Put your definitions here
+%%  Put your definitions here
 \endlocaldefs
 
-% Will be filled by editor:
+%%  Will be filled by editor:
 \pubyear{2018}
 \volume{0}
 \issue{0}
@@ -31,15 +31,15 @@
 
 \begin{frontmatter}
 
-% "Title of the Paper"
+%%  "Title of the Paper"
 \title{???\protect\thanksref{T1}}
 \thankstext{T1}{???}
 
 \begin{aug}
-% Indicate corresponding author with \thanksref{}
-% \author{\inits{J.}\fnms{John} \snm{Smith}\thanksref{t2}\ead[label=e1]{smith@foo.com}\ead[label=e2,url]{www.foo.com}}
-% \thankstext{t2}{Corresponding author.}
-% \address{line 1\\ line 2\\ \printead{e1}\\\printead{e2}}
+%%  Indicate corresponding author with \thanksref{}
+%%  \author{\inits{J.}\fnms{John} \snm{Smith}\thanksref{t2}\ead[label=e1]{smith@foo.com}\ead[label=e2,url]{www.foo.com}}
+%%  \thankstext{t2}{Corresponding author.}
+%%  \address{line 1\\ line 2\\ \printead{e1}\\\printead{e2}}
 
 \author{\inits{???}\fnms{???} \snm{???}\ead[label=e1]{???}}
 \address{???\\\printead{e1}}
@@ -52,7 +52,7 @@
 %\address{???\\\printead{e3}\\\printead{u1}}
 %\thankstext{t2}{Corresponding author.}
 \end{aug}
-% history:
+%%  History:
 %\received{\sday{3} \smonth{1} \syear{2018}}
 
 %\begin{abstract}
@@ -64,7 +64,7 @@
 %\kwd[; secondary ]{}
 %\end{keyword}
 
-%% Upper case for every keyword
+%%  Upper case for every keyword
 %\begin{keyword}
 %\kwd{}
 %\kwd{}
@@ -74,6 +74,27 @@
 
 \end{frontmatter}
 
+%%  The body
 
+
+%%  The bibliography
+
+%%  If your bibliography is in BibTeX format, use the following setup:
+%%  Style BST file for numbered citation:
+%\bibliographystyle{imsart-number}
+%%  or name-year citation
+%\bibliographystyle{imsart-nameyear}
+%%  Bibliography file (usually `*.bib')
+%\bibliography{sii-sample}          
+%%
+%%  or include bibliography directly:
+%\begin{thebibliography}{9}
+%%  Use \bibitem{r1} or \bibitem[Surname(2010)]{r1} (for authoryear case)
+%%  Put author names in \textsc{} command in order to use small caps font
+%
+%\bibitem{}
+%\textsc{}
+%
+%\end{thebibliography}
 
 \end{document}

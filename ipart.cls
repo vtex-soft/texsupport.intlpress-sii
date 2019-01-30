@@ -52,7 +52,7 @@
 
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ipart}[2018/12/05 driver class for package imsart.sty]
+\ProvidesClass{ipart}[2019/01/29 driver class for package imsart.sty]
 
 \def\@publisher{International Press, Inc.}
 \def\@publisheraddress{387 Somerville Avenue, Somerville, MA 02143, U.S.A.}
@@ -734,6 +734,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
     \if@numbered@bibl
         \PassOptionsToPackage{numbers,square}{natbib}
     \fi
+    \@load@natbibtrue
     \load@natbib@from@imsart
     }
 
@@ -1076,6 +1077,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
     \if@numbered@bibl
         \PassOptionsToPackage{numbers,square}{natbib}
     \fi
+    \@load@natbibtrue
     \load@natbib@from@imsart
     }
 

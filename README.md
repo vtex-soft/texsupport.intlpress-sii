@@ -39,6 +39,11 @@ The following files are given in the repository (or directly in `*.zip` archive)
 
 Use `sii-template.tex` as a template.
 
+### Dependencies
+
+`ipart.cls` file loads `flushend.sty` and `stfloats.sty` from [`sttools`](https://ctan.org/pkg/sttools) package.
+Please make sure that your TeX system has the latest version of this package.
+
 ### Document class options
 
 For the SII journal `sii` option must be set
@@ -80,7 +85,7 @@ The preamble of your LaTeX document should look like this:
 
     \begin{frontmatter}
 
-        \title{A Sample Document\protect\thanksref{T1}}
+        \title{Title\protect\thanksref{T1}}
         \thankstext{T1}{Footnote to the title with the `thankstext' command.}
 
         \begin{aug}

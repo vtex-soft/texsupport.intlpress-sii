@@ -1,5 +1,5 @@
-%% It's a sample file!
-%% Please use corressponding template
+%%  It's a sample file!
+%%  Please use corressponding template
 
 \documentclass[sii]{ipart}
 
@@ -10,20 +10,23 @@
 %\numberwithin{equation}{section}
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
+\def\SM#1#2{\sum_{#1\in #2}}
+\def\FL#1{\left\lfloor #1 \right\rfloor}
+\def\FR#1#2{{\frac{#1}{#2}}}
 \endlocaldefs
 
-% Settings
+%%  Settings
 \pubyear{2018}
 \volume{0}
 \issue{0}
 \firstpage{1}
 \lastpage{4}
-\arxiv{math/0000.0000}
+\arxiv{0000.0000}
 
 \begin{document}
 
 \begin{frontmatter}
-\title[A sample document]{A sample document could be very long could be very long\protect\thanksref{T1}}
+\title[A sample document]{A sample document\protect\thanksref{T1}}
 \thankstext{T1}{Footnote to the title with the `thankstext' command.}
 
 \begin{aug}
@@ -70,6 +73,7 @@ your own.
 \kwd{Sample}
 \kwd{\LaTeXe}
 \end{keyword}
+
 %\tableofcontents
 \end{frontmatter}
 
@@ -85,10 +89,10 @@ of  a paragraph.
 
 Since any number of consecutive spaces are treated like a single
 one, the formatting of the input file makes no difference to
-      \TeX,         % The \TeX command generates the TeX logo.
+      \TeX,
 but it makes a difference to you.
 When you use
-      \LaTeX,       % The \LaTeX command generates the LaTeX logo.
+      \LaTeX,
 making your input file as easy to read as possible
 will be a great help as you write your document and when you
 change it.  This sample file shows how you can add comments to
@@ -99,7 +103,7 @@ number of things that you have to do differently when preparing
 an input file than if you were just typing the document directly.
 Quotation marks like       ``this''
 have to be handled specially, as do quotes within quotes:
-       ``\,`this'                  % \, separates the double and single quote.
+       ``\,`this'          % \, separates the double and single quote.
     is what I just
     wrote, not  `that'\,''.
 
@@ -121,11 +125,11 @@ You should check the spaces after periods when reading your output to
 make sure you haven't forgotten any special cases.
 Generating an ellipsis
        \ldots\    % `\ ' needed because TeX ignores spaces after
-          % command names like \ldots made from \ + letters.
-          %
-          % Note how a `%' character causes TeX to ignore the
-          % end of the input line, so these blank lines do not
-          % start a new paragraph.
+                  % command names like \ldots made from \ + letters.
+%
+% Note how a `%' character causes TeX to ignore the
+% end of the input line, so these blank lines do not
+% start a new paragraph.
 with the right spacing around the periods
 requires a special  command.
 
@@ -135,9 +139,9 @@ following:
        \& \% \# \{ and~\}.
 
 In printing, text is emphasized by using an
-       {\em italic\/}  % The \/ command produces the tiny extra space that
-               % should be added between a slanted and a following
-               % unslanted letter.
+{\em italic\/}    % The \/ command produces the tiny extra space that
+                  % should be added between a slanted and a following
+                  % unslanted letter.
 type style.
 
 \begin{em}
@@ -151,7 +155,7 @@ type style.
 It is sometimes necessary to prevent \TeX\ from breaking a line where
 it might otherwise do so.  This may be at a space, as between the
 ``Mr.'' and ``Jones'' in
-       ``Mr.~Jones'',        % ~ produces an unbreakable interword space.
+``Mr.~Jones'',    % ~ produces an unbreakable interword space.
 or within a word---especially when the word is a symbol like
        \mbox{\em itemnum\/}
 that makes little sense when hyphenated across
@@ -162,7 +166,7 @@ that makes little sense when hyphenated across
 or
        \( a_{1} > x^{2n} / y^{2n} > x' \).
 Remember that a letter like
-       $x$        % $ ... $  and  \( ... \)  are equivalent
+       $x$    % $ ... $  and  \( ... \)  are equivalent
 is a formula when it denotes a mathematical symbol, and should
 be treated as one.
 
@@ -312,7 +316,7 @@ In other words, glucose represses (and not inhibits) the penicillin
 biosynthesis.
 
 These findings do not contradict the results of
-\cite{r1}  and of \cite{r4} which were obtained for
+\cite{r1} and of \cite{r4} which were obtained for
 continuous culture fermentations.
 Because for high values of the specific
 growth rate $\mu$ it is most likely (as shall be discussed below) that
@@ -337,11 +341,12 @@ detected. The experimental data published by Ryu and Hospodka
 are not detailed sufficiently to permit a similar analysis.
 
 \begin{table}
-\caption{Parameter sets used by Bajpai and Reu\ss are not detailed sufficiently to permit a similar analysis}\label{parset}
+\caption{Parameter sets used by Bajpai and Reu\ss are not detailed sufficiently to permit a similar analysis}
+\label{parset}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llll}
 \hline
 \hline
-\multicolumn{2}{@{}l}{Parameter} & {\it Set 1} & {\it Set 2}\\
+\multicolumn{2}{@{}l}{\textit{Parameter}} & \textit{Set 1} & \textit{Set 2}\\
 \hline
 $\mu_{x}$           & [h$^{-1}$]  & 0.092       & 0.11          \\
 $K_{x}$             & [g/g DM]     & 0.15        & 0.006         \\
@@ -366,12 +371,13 @@ It is interesting that simulations with the \cite{r4} model for the
 initial conditions given by these authors indicate that, when the
 remaining substrate is fed at a constant rate, a considerable and
 unrealistic amount of penicillin is
-produced when the glucose concentration is still very high \cite{r2,r3,r4}
+produced when the glucose concentration is still very high \cite{r2,r3,r4}.
 Simulations with the Bajpai and Reu\ss\ model correctly predict almost
 no penicillin production in similar conditions.
 
 \begin{figure}
-\fbox{\parbox[b][1.5cm]{3cm}{\ }}
+\centering
+\fbox{\makebox[5cm][c]{Picture}\rule[-1.5cm]{0pt}{3cm}}
 %\includegraphics{}
 \caption{Pathway of the penicillin G biosynthesis.}\label{penG}
 \end{figure}
@@ -420,7 +426,6 @@ and
  \sigma           & =  \mu_{\rm substr}/Y_{x/s}+ H(C_{s}) (m_{s}+ \pi /Y_{p/s})
 \end{align}
 
-
 \appendix
 
 \section{Appendix section}\label{app}
@@ -457,17 +462,17 @@ Sample of cross-reference to the formula \ref{path} in Appendix~\ref{app}.
 
 \section*{Acknowledgements}
 And this is an acknowledgements section with a heading that was produced by the
-$\backslash$section* command. Thank you all for helping me writing this
+\verb|\section*| command. Thank you all for helping me writing this
 \LaTeX\ sample file.
 
 \begin{thebibliography}{9}
+%%  Put author names in \textsc{} command in order to use small caps font
 
 \bibitem{r1}
 \textsc{Billingsley, P.} (1999). \textit{Convergence of
 Probability Measures}, 2nd ed.
 Wiley, New York.
 \MR{1700749}
-
 
 \bibitem{r2}
 \textsc{Bourbaki, N.}  (1966). \textit{General Topology}  \textbf{1}.

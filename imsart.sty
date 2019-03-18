@@ -26,7 +26,7 @@
 %%   International Society for Bayesian Analysis
 %%
 %% Macros written by Vytas Statulevicius, VTeX, Lithuania
-%% Maintained by Deimantas Galcius, VTeX, Lithuania
+%% Maintained by Deimantas Galcius and Edgaras Sakuras, VTeX, Lithuania
 %% for Institute of Mathematical Statistics, U.S.A.
 %% Please submit bugs or your comments to latex-support@vtex.lt
 %%
@@ -68,14 +68,12 @@
 % Requires Latex2e, ver.2000.06
 
 \def\imsfmt@name{imsart}
-\def\imsfmt@version{2018/11/12}
+\def\imsfmt@version{2019/02/20}
 
 \ProvidesFile{imsart.sty}
-        [\imsfmt@version IMS article style (VS)]
-
+        [\imsfmt@version\space IMS article style (VS)]
 
 \RequirePackage{etoolbox}
-
 
 % hyperref must be loaded after:
 \@ifpackageloaded{hyperref}{\@latex@error{Package 'hyperref' must be loaded after 'imsart'!}\@ehc}{}
@@ -1218,6 +1216,7 @@
 \setattribute{title}      {size} {\LARGE\bfseries}
 \setattribute{author}     {size} {\normalsize\bfseries}
 \setattribute{fnms}       {size} {}
+\setattribute{inits}      {size} {}
 \setattribute{snm}        {size} {}
 \setattribute{address}    {size} {\footnotesize\itshape\mdseries}
 \setattribute{affiliation}{size} {\footnotesize\itshape\mdseries}
@@ -1321,6 +1320,7 @@
 \def\endfrontmatter{%
   \global\@topnum\z@
   \set@pagerange
+  \csname form@runauthors\endcsname
   \markboth{\@runauthor}{\@runtitle}%
   \thispagestyle{copyright}%
 %
@@ -1367,7 +1367,14 @@
 \splittopskip=\topskip \splitmaxdepth=\maxdepth
 \t@xtheight\textheight \advance\t@xtheight-\splittopskip}
 
-\def\no@harm{\let\thanks=\@gobble\let\thanksref=\@gobble\let~\space\def\ead[##1]##2{}\let\\=\@empty \def\protect{\noexpand\protect\noexpand}}
+\def\no@harm{%
+    \let\thanks=\@gobble
+    \let\thanksref=\@gobble
+    \let~\space
+    \def\ead##1##{\@gobble}%
+    \let\\=\@empty
+    \def\protect{\noexpand\protect\noexpand}%
+    }
 
 \def\open@fm{%
   \global\setbox\fm@box=\vbox\bgroup
@@ -1436,17 +1443,32 @@
 \def\author{\@ifnextchar[{\author@fmt}{\author@fmt[]}}
 
 \def\author@fmt[#1]#2{%
-  \stepcounter{author}%
-  \author@fmt@init%
-  \let\author@fmt@init\relax%
-  \bgroup% 
-     \def\degs##1{##1}\def\fnms##1{##1}\def\inits##1{##1}\def\snm##1{##1}\def\roles##1{##1}%
-     \@tempcnta=\author@num\relax%
-     \ifnum\c@author=\@tempcnta \def\author@sep{ and }\else \def\author@sep{, }\fi%
-     \ifnum\c@author=1\addto@authors@list{#2}\else\addto@authors@list{\author@sep #2}\fi%
-     \def\fnms##1{{\fnms@size{##1}}}\def\snm##1{\snm@size{##1}}%
-     \noindent#2\thanksref{#1}%
-  \egroup}
+    \stepcounter{author}%
+    \author@fmt@init%
+    \let\author@fmt@init\relax%
+    \bgroup% 
+        \def\degs##1{##1}%
+        \def\fnms##1{##1}%
+        \def\inits##1{}%
+        \def\snm##1{##1}%
+        \def\roles##1{##1}%
+        \@tempcnta=\author@num\relax%
+        \ifnum\c@author=\@tempcnta
+            \def\author@sep{ and }%
+        \else
+            \def\author@sep{, }%
+        \fi
+        \ifnum\c@author=1%
+            \addto@authors@list{#2}%
+        \else
+            \addto@authors@list{\author@sep #2}%
+        \fi%
+        \def\inits##1{{\inits@size{##1}}}%
+        \def\fnms##1{{\fnms@size{##1}}}%
+        \def\snm##1{\snm@size{##1}}%
+        \noindent#2\thanksref{#1}%
+    \egroup
+    }
 
 \def\author@fmt@init{%
    \vskip\authors@skip%
@@ -2455,10 +2477,12 @@
 
 \newtoks\authors@list
 \def\addto@authors@list#1{%
-  \begingroup%
-    \no@harm%
-    \xdef\@act{\global\noexpand\authors@list{\the\authors@list#1}}\@act%
-  \endgroup}
+    \begingroup
+        \no@harm
+        \xdef\@act{\global\noexpand\authors@list{\the\authors@list#1}}%
+        \@act
+    \endgroup
+    }
 
 \newtoks\keywords@list
 \def\addto@keywords@list#1{%

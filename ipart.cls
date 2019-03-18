@@ -5,10 +5,13 @@
 %%
 %% Statistics and Its Interface (SII)
 %% Journal of Combinatorics (JOC)
+%% Communications in Number Theory and Physics (CNTP)
 %% Cambridge Journal of Mathematics (CJM)
 %% Geometry, Imaging and Computing (GIC)
+%% Mathematics, Computation and Geometry of Data (MCGD)
 %% Communications in Information and Systems (CIS)
 %% Annals of Mathematical Sciences and Applications (AMSA)
+%% Pure and Applied Mathematics Quarterly (PAMQ)
 %%
 %% Macros written by Vytas Statulevicius, VTeX, Lithuania
 %% for International Press, U.S.A.
@@ -52,7 +55,7 @@
 
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ipart}[2019/01/29 driver class for package imsart.sty]
+\ProvidesClass{ipart}[2019/03/18 driver class for package imsart.sty]
 
 \def\@publisher{International Press, Inc.}
 \def\@publisheraddress{387 Somerville Avenue, Somerville, MA 02143, U.S.A.}
@@ -86,6 +89,26 @@
   \@joclayouttrue
 }
 
+\DeclareOption{cntp}{%
+  \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
+  \PassOptionsToPackage{leqno}{amsmath}
+  \AtEndOfPackage{\def\journal@id{-cntp}}
+  \AtBeginDocument{\def\journal@name{Communications in \break Number Theory and Physics}}
+  \AtBeginDocument{\def\journal@issn{ISSN: 2168-0930}}
+  \AtBeginDocument{\def\journal@eissn{ISSN: 1931-4531}}
+  \AtBeginDocument{\def\journal@url{http://www.intlpress.com/CNTP/}}
+  \AtEndOfPackage{\let\affiliation\@gobble}
+  \@joclayouttrue
+  \AtBeginDocument{%
+    %% Ensuring that journal title will be placed in two lines:
+    \AfterPackage{hyperref}{\hypersetup{breaklinks=True}}%
+    \setattribute{title}{style}{\bfseries}%
+    \setattribute{history}{postfix}{}%
+    \setattribute{revised}{prefix}{\\Revised~}%
+    \setattribute{accepted}{prefix}{\\Accepted~}%
+    }%
+}
+
 \DeclareOption{gic}{%
   \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
   \PassOptionsToPackage{leqno}{amsmath}
@@ -93,6 +116,18 @@
   \AtBeginDocument{\def\journal@name{Geometry, Imaging and Computing}}
   \AtBeginDocument{\def\journal@issn{ISSN: 2328-8876}}
   \AtBeginDocument{\def\journal@url{http://intlpress.com/GIC/}}
+  \AtEndOfPackage{\let\affiliation\@gobble}
+  \@joclayouttrue
+}
+
+\DeclareOption{mcgd}{%
+  \PassOptionsToClass{letter,11pt,twoside,leqno}{article}
+  \PassOptionsToPackage{leqno}{amsmath}
+  \AtEndOfPackage{\def\journal@id{-mcgd}}
+  \AtBeginDocument{\def\journal@name{Mathematics, Computation and Geometry of Data}}
+  \AtBeginDocument{\def\journal@issn{ISSN: 2642-1909}}
+  \AtBeginDocument{\def\journal@eissn{ISSN: 2642-1917}}
+  \AtBeginDocument{\def\journal@url{http://intlpress.com/MCGD/}}
   \AtEndOfPackage{\let\affiliation\@gobble}
   \@joclayouttrue
 }
@@ -195,7 +230,7 @@ File could be downloaded from http://www.e-publications.org/ims/support
     \let\special@mt\origspecial@mt
     }
 
-\setattribute{ead}{size}{\ensure@breakable@url\upshape\ttfamily}
+\setattribute{ead}{size}{\@ifundefined{url}{}{\ensure@breakable@url}\upshape\ttfamily}
 
 \def\ensure@breakable@url{%
     \def\email@ead@type{email}%

@@ -8,7 +8,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \def\ipfmt@name{ipart-layout-pamq}
-\def\ipfmt@version{2020/05/04 v2.0}
+\def\ipfmt@version{2020/10/14 v2.0.1}
 \ProvidesPackage{\ipfmt@name}
     [\ipfmt@version INTLPRESS journal PAMQ layout style]
 
@@ -1054,7 +1054,11 @@
         {%
             \ead@size
             \def\null{}%
-            \ip@href{\ead@prefix\saferef{\ead@ref @\ead@type}}{\ip@href@text}%
+            \@ifundefined{r@\ead@ref @\ead@type}{%
+                \ip@href@text
+                }{%
+                    \ip@href{\ead@prefix\saferef{\ead@ref @\ead@type}}{\ip@href@text}%
+                }%
             }%
         \@ifundefined{ead@text}{}{\let\prev@ead@text\ead@text}%
         }%

@@ -8,7 +8,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \def\ipfmt@name{ipart-layout-sii}
-\def\ipfmt@version{2020/10/14 v2.0.1}
+\def\ipfmt@version{2022/11/25 v2.0.2}
 \ProvidesPackage{\ipfmt@name}
     [\ipfmt@version INTLPRESS journal SII style]
 
@@ -1404,6 +1404,8 @@
     \@xsect{#3}%
     }
 
+\RequirePackage{textcase}
+
 \setcounter{secnumdepth}{4}
 
 %%  \phantomsection is defined in hyperref
@@ -1414,7 +1416,7 @@
     \@startsection{section}{1}{\z@}%
                   {\medskipamount}%
                   {\smallskipamount}%
-                  {\centering\sffamily\large\bfseries\mathversion{bold}\MakeUppercase}%
+                  {\centering\sffamily\large\bfseries\mathversion{bold}\MakeTextUppercase}%
     }
 \renewcommand\subsection{%
     \@startsection{subsection}{2}{12\p@}%

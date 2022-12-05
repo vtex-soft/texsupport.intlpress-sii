@@ -8,7 +8,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \def\ipfmt@name{ipart-layout-sii}
-\def\ipfmt@version{2022/11/25 v2.0.2}
+\def\ipfmt@version{2022/12/02 v2.0.3}
 \ProvidesPackage{\ipfmt@name}
     [\ipfmt@version INTLPRESS journal SII style]
 
@@ -211,18 +211,39 @@
 \def\pagenumber@size{\small\upshape}
 
 \def\ps@ipheadings{%
+    \def\pseudo@even@foot@line{%
+        \runninghead@size
+        \hbox to18\p@{\pagenumber@size 000\hfill}%
+        \leftmark
+        }%
+    \def\pseudo@odd@foot@line{%
+        \runninghead@size
+        \rightmark
+        \hbox to18\p@{\hfill\pagenumber@size 000}%
+        }%
     \def\@oddfoot{%
+        \check@foot@line{odd}{title}%
         \runninghead@size
         \hfill\rightmark
         \hbox to18\p@{\hfill\pagenumber@size\thepage}%
         }%
     \def\@evenfoot{%
+        \check@foot@line{even}{author}%
         \runninghead@size
         \hbox to18\p@{\pagenumber@size\thepage\hfill}%
         \leftmark\hfill
         }%
     \def\@evenhead{\hfill}%
     \def\@oddhead{\hfill}%
+    }
+\def\check@foot@line#1#2{%
+    \bgroup
+        \settowidth\@tempdima{\csname pseudo@#1@foot@line\endcsname}%
+        \ifdim\@tempdima>\textwidth\relax
+            \ClassError{ipart}{Running #2 is too long!}{}%
+            \global\def\check@foot@line##1##2{\relax}%
+        \fi
+    \egroup
     }
 
 \def\copyright@size{\sffamily\small\raggedright}

@@ -18,7 +18,7 @@ Author support service provides LaTeX style files and `*.tex` file templates des
 
 The following files are given in the repository (or directly in `*.zip` archive):
 
-* `ipart.cls`, `ipart-layout-*.sty` - LaTeX style files designed for International Press journal articles.
+* `ipart.cls`, `ipart-layout-sii.sty` - LaTeX style files designed for International Press journal articles.
   Please do not change them. These files are already loaded in the respective template files;
 * `imsart-number.bst`, `imsart-nameyear.bst` - suggested BibTeX[^1] related bibliography styles.
   If your bibliography is structured in BibTeX format, loading your `*.bib` file
@@ -31,7 +31,7 @@ The following files are given in the repository (or directly in `*.zip` archive)
 
 ## Setup
 * Clone the repository or download the `*.zip` archive. Rename the package to `<your-project-name>`.
-* Install `ipart.cls`, `ipart-layout-*.sty`, `imsart-number.bst`, `imsart-nameyear.bst` in your TeX system (suggested directory: `ipart`).
+* Install `ipart.cls`, `ipart-layout-sii.sty`, `imsart-number.bst`, `imsart-nameyear.bst` in your TeX system (suggested directory: `ipart`).
 * Use the file `sii-template.tex` to start your article as a template.
 * Use the file `sii-sample.tex` as a reference for how to prepare a topmatter of your article.
 

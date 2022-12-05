@@ -69,6 +69,7 @@
 \def\main@layout@id{0}
 \def\pamq@layout@id{1}
 \def\sii@layout@id{2}
+\def\jbr@layout@id{3}
 \let\selected@layout\main@layout@id
 
 \def\journal@id{}
@@ -187,6 +188,18 @@
         }%
     \global\let\selected@layout\sii@layout@id
     }
+\DeclareOption{jbr}{%
+    \PassOptionsToClass{10pt,twocolumn}{article}%
+    \def\journal@id{-jbr}%
+    \def\journal@name{Journal of Blockchain Research}%
+    \def\journal@issn{ISSN: 2643-5748}%
+    \def\journal@eissn{ISSN: 2643-5756}%
+    \def\journal@url{\ip@journal@url{jbr}}%
+    \AtBeginDocument{%
+        \def\bauthor@style{\sc}%
+        }%
+    \global\let\selected@layout\jbr@layout@id
+    }
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions*
@@ -206,6 +219,8 @@
     \RequirePackage{ipart-layout-pamq}
 \or  % 2 - sii layout
     \RequirePackage{ipart-layout-sii}
+\or  % 2 - sii layout
+    \RequirePackage{ipart-layout-jbr}
 \fi
 %%
 %%  ======= VTeX SETUP =======

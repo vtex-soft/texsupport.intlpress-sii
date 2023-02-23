@@ -8,7 +8,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \def\ipfmt@name{ipart-layout-sii}
-\def\ipfmt@version{2022/12/02 v2.0.3}
+\def\ipfmt@version{2023/02/23 v2.0.4}
 \ProvidesPackage{\ipfmt@name}
     [\ipfmt@version INTLPRESS journal SII style]
 
@@ -1830,7 +1830,7 @@
 
 %%  This splits MR... (...)
 \def\@MR#1 #2\relax#3{%
-    \href{http://www.ams.org/mathscinet-getitem?mr=#1}{\MRfixed{#3}}%
+    \href{https://mathscinet.ams.org/mathscinet-getitem?mr=#1}{\MRfixed{#3}}%
     }
 \let\MR\MRfixed
 
@@ -2124,7 +2124,7 @@
     \@ifundefined{user@hy@subject}{}{\global\let\@pdfsubject\user@hy@subject}%
     \@ifundefined{user@hy@keywords}{}{\global\let\@pdfkeywords\user@hy@keywords}%
     %%  MathSciNet:
-    %%  \def\MR##1{\href{http://www.ams.org/mathscinet-getitem?mr=##1}{MR##1}}
+    %%  \def\MR##1{\href{https://mathscinet.ams.org/mathscinet-getitem?mr=##1}{MR##1}}
     %%  MR with hyperef
     \def\MR##1{\@MR##1 \relax{##1}}%
     %%  \@ifundefined{Hy@SetCatcodes}{\let\MR\MRfixed}{\relax}%

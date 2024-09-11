@@ -60,6 +60,8 @@
 \RequirePackage{etoolbox}
 \RequirePackage{keyval}
 \RequirePackage{afterpackage}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
 
 \def\do@option@list#1#2{%
     \@for\curr@option:={#2}\do{%
@@ -317,8 +319,8 @@
         }%
     }
 \let\@arxiv\relax
-%%  http://arxiv.org/abs/math.PR/0603300
-\def\arxiv@base{http://arxiv.org/abs/}
+%%  https://arxiv.org/abs/math.PR/0603300
+\def\arxiv@base{https://arxiv.org/abs/}
 
 %%  firstpage, lastpage, pagerange
 \newcounter{firstpage}
@@ -1107,10 +1109,10 @@
                         \safe@phantomsection{\addcontentsline{toc}{section}{Authors' addresses}}%
                     \fi
                 \fi
-                \begin{tabular}[t]{@{}p{\columnwidth}@{}}
-                    \expandafter\expandafter\expandafter\csname @author@\@tmp\endcsname\\
-                    \expandafter\expandafter\expandafter\the\csname @address@\@tmp\endcsname
-                \end{tabular}%
+                \allowbreak%
+                \nobreak%
+                \expandafter\expandafter\expandafter\csname @author@\@tmp\endcsname\newline%
+                \expandafter\expandafter\expandafter\the\csname @address@\@tmp\endcsname%
                 }%
     \egroup
     }
@@ -1121,11 +1123,15 @@
     \bgroup
         \parindent\z@
         \vskip\address@skip
+        \interlinepenalties 1 10000%
+        \clubpenalties 1 10000%
+        \linespread{1}\selectfont%
         \@whilenum{\@tempcnta<\c@address}\do{%
             \advance\@tempcnta\@ne
             \vskip\address@skip
+            \leavevmode
             \expandafter\printaddressnum\expandafter{\the\@tempcnta}%
-            \ifnum\@tempcnta<\c@address
+            \ifnum\@tempcnta<\c@address%
                 \par
             \fi
             }%
@@ -1133,14 +1139,8 @@
     \null
     }
 
-%%  Invoke \printaddresses at end of document:
-\RequirePackage{flushend}
-%% Activating `ancient' option, which was not present in TL2010 style version
-\@ifpackagelater{flushend}{2015/04/08}{\global\@ancient@balance@versiontrue}{}
-%%  This \enddocument hook has to go after flushend.sty hook:
-\AtBeginDocument{%
-    \preto\enddocument{\printaddresses}%
-    }
+\RequirePackage[nospread]{flushend}
+\AtEndDocument{\printaddresses\let\@outputdblcol\balanced@@outputdblcol}
 %%
 %%  ======= DEDICATION =======
 %%
@@ -1420,7 +1420,7 @@
         \def\@svsechd{#4{\hskip #1\relax #5\aftersec@dot}}%
     \fi
     \ifnum\ssection@level=1%
-        \phantomsection\addcontentsline{toc}{section}{#5}%
+        \addcontentsline{toc}{section}{#5}%
     \fi
     \@xsect{#3}%
     }

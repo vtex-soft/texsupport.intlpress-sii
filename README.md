@@ -12,7 +12,7 @@
 ## About
 
 Author support service provides LaTeX style files and `*.tex` file templates designed for International Press journal
-[Statistics and Its Interface (SII)](http://www.intlpress.com/SII/) articles.
+[Statistics and Its Interface (SII)](http://www.intlpress.com/SII) articles.
 
 ## Package content
 

@@ -15,7 +15,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ipart}
-    [2024/10/17 v2.7, driver class for INTLPRESS journals]
+    [2025/10/14 v2.8, driver class for INTLPRESS journals]
 
 %%  DEPENDENCIES:
 %%  - article.cls
@@ -82,7 +82,7 @@
 \def\journal@issn{}
 \def\journal@url{}
 \def\ip@journal@url#1{%
-    https://www.intlpress.com/site/pub/pages/journals/items/#1/_home/_main/index.php%
+    https://intlpress.com/#1%
     }
 \def\@publisher{International Press, Inc.}
 \def\@publisheraddress{387 Somerville Avenue, Somerville, MA 02143, U.S.A.}

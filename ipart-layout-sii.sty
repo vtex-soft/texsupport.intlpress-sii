@@ -8,7 +8,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \def\ipfmt@name{ipart-layout-sii}
-\def\ipfmt@version{2025/09/03 v2.0.5}
+\def\ipfmt@version{2026/05/25 v2.0.12}
 \ProvidesPackage{\ipfmt@name}
     [\ipfmt@version INTLPRESS journal SII style]
 
@@ -63,12 +63,33 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lmodern}
 
+\IfFileExists{fileinfo.sty}{%
+    \ifdefined\jobstart@date@info
+    \else
+        \RequirePackage{fileinfo}\getFileInfo
+    \fi
+    }{%
+    \xdef\jobstart@date@info{\the\year\two@digits{\the\month}\two@digits{\the\day}}%
+    }
+
 \def\do@option@list#1#2{%
     \@for\curr@option:={#2}\do{%
         \expandafter\sep@key@value\curr@option/?/{#1}\relax
         }%
     }
 \def\sep@key@value#1=#2/?/#3{\expandafter\gdef\csname #3@#1\endcsname{#2}}
+
+%% setpkgattr
+\def\pkgattr@namedef{\long\gdef}
+\def\pkgattr@namedef@def#1{\expandafter\pkgattr@namedef\csname #1\endcsname}
+\protected\def\setpkgattr{\@ifnextchar[{\@setpkgattr}{\@@setpkgattr}}
+\protected\def\getpkgattr#1#2{\csname #1@#2\endcsname}
+\long\def\@setpkgattr[#1]#2#3#4{%
+    \pkgattr@namedef@def{#2@#3}{#4}%
+    }
+\long\def\@@setpkgattr#1#2#3{%
+    \pkgattr@namedef@def{#1@#2}{#3}%
+    }
 
 %%  Macro by S.T. for unique enumeration system
 \def\ip@setvaluelist#1#2{%
@@ -602,13 +623,20 @@
 %%
 
 \def\runtitle#1{\gdef\@runtitle{#1}}
-\def\@runtitle{}
 
 \def\title@style{\raggedrightmargin{11pc}}
 \def\title@font{\LARGE\sffamily\bfseries}
 \def\title@skip{36\p@}
 
-\def\title{\@ifnextchar[{\title@fmt}{\title@fmt[]}}
+\ifnum\jobstart@date@info>22220003\relax
+    \def\title{%
+        \@ifnextchar[%
+        {\PackageError{ipart-layout-sii}{\string\title[]{} optional parameter forbidden. Use \string\runtitle{} instead}{}}%
+        {\title@fmt[]}%
+        }
+\else
+    \def\title{\@ifnextchar[{\title@fmt}{\title@fmt[]}}
+\fi
 \def\title@fmt[#1]#2{%
     \bgroup
         \let\thanksref\@gobble
@@ -617,7 +645,10 @@
         \ifx\@runtitle@fmt\@empty
             \def\title@arg##1\thanksref##2{\gdef\@title@fmt{##1}}%
             \title@arg#2\thanksref{}
-            \gdef\@runtitle{\@title@fmt}%
+            \ifdefined\@runtitle
+            \else
+                \gdef\@runtitle{\@title@fmt}%
+            \fi
         \else
             \gdef\@runtitle{\@runtitle@fmt}%
         \fi
@@ -1223,16 +1254,25 @@
 \newbox\keyword@box
 \newdimen\pre@kwd@depth
 
-\def\keyword@AMS{AMS 2000 subject classifications:}
+\ifnum\jobstart@date@info>20260428\relax
+    \def\keyword@AMS{%
+        \PackageError{ipart-layout-sii}{Please use [class=MSC] instead of [class=AMS]}{}%
+        }
+    \expandafter\def\csname keyword@MSC2010\endcsname{%
+        \PackageError{ipart-layout-sii}{Please use [class=MSC] instead of [class=MSC2010]}{}%
+        }
+\else
+    \def\keyword@AMS{AMS 2000 subject classifications:}
+    \expandafter\def\csname keyword@MSC2010\endcsname{MSC 2010 subject classifications:}
+\fi
 \def\keyword@MSC{MSC 2010 subject classifications:}
-\expandafter\def\csname keyword@MSC2010\endcsname{MSC 2010 subject classifications:}
 \def\keyword@KWD{Keywords and phrases:}
 
 %%  raktas=class
 \def\keyword@class{KWD}
 
 %%  \keyword@class-> KWD
-%%  \keyword@KWD  -> AMS 2000...
+%%  \keyword@KWD  -> MSC 2010...
 \gdef\keyword{\@ifnextchar[{\@keyword}{\@keyword[class=KWD]}}
 \gdef\@keyword[#1]{%
     \do@option@list{keyword}{#1}%
@@ -1272,9 +1312,29 @@
 \def\sep{\unskip\string, }
 \newif\if@firstkeywordinlist \@firstkeywordinlisttrue
 
-\DeclareRobustCommand*\kwd{%
-    \@ifnextchar[\@kwd{\@kwd[\kwd@sep]}%
+\def\kwdgroup{%
+    \@ifnextchar[\@kwdgroup{\@kwdgroup[]}%
     }
+\def\@kwdgroup[#1]#2{%
+    \def\kwd@sep{\ }%
+    \@firstkeywordinlisttrue
+    \ifstrequal{#1}{type=primary}{\kwdgroup@primary}{\unskip}%
+    \ifstrequal{#1}{type=secondary}{\kwdgroup@secondary}{\unskip}%
+    #2\unskip%
+    }
+\setpkgattr{kwdgroup}{primary}{Primary}
+\setpkgattr{kwdgroup}{secondary}{\unskip; secondary}
+\ifnum\jobstart@date@info>20260428\relax
+    \DeclareRobustCommand*\kwd{%
+        \@ifnextchar[%
+            {\PackageError{ipart-layout-sii}{Don't use square brackets '[...]' in \string\kwd!}{}}%
+            {\@kwd[\kwd@sep]}%
+        }
+\else
+    \DeclareRobustCommand*\kwd{%
+        \@ifnextchar[\@kwd{\@kwd[\kwd@sep]}%
+        }
+\fi
 \def\@kwd[#1]#2{%
     \unskip#1{#2}%
     \if@firstkeywordinlist

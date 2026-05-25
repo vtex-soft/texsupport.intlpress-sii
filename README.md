@@ -112,10 +112,9 @@ The preamble of your LaTeX document should look like this:
             ...
         \end{abstract}
 
-        \begin{keyword}[class=AMS]  % please indicate appropriate AMS codes
-            \kwd[Primary ]{00K00}
-            \kwd{00K01}
-            \kwd[; secondary ]{00K02}
+        \begin{keyword}[class=MSC]  % please indicate appropriate MSC codes
+            \kwdgroup[type=primary]{\kwd{00K00}\kwd{00K01}}
+            \kwdgroup[type=secondary]{\kwd{00K02}}
         \end{keyword}
 
         \begin{keyword}
